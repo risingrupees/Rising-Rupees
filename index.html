@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://unpkg.com/lenis@1.0.6/dist/lenis.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rising Rupees</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<!-- SMOOTH SCROLL -->
+<script src="https://unpkg.com/lenis@1.0.6/dist/lenis.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
@@ -17,11 +19,6 @@ body{
   overflow-x:hidden;
 }
 
-/* SMOOTH SCROLL */
-html {
-  scroll-behavior: smooth;
-}
-
 /* SECTION */
 .section{
   position:relative;
@@ -29,11 +26,10 @@ html {
   display:flex;
   align-items:center;
   justify-content:center;
-  text-align:center;
   overflow:hidden;
 }
 
-/* BACKGROUND */
+/* BACKGROUND LAYER */
 .bg{
   position:absolute;
   width:100%;
@@ -42,60 +38,50 @@ html {
   background-position:center;
   transform:scale(1.1);
   filter:brightness(0.5);
-  transition: transform 6s ease;
+  z-index:0;
 }
 
-.section:hover .bg{
-  transform:scale(1.2);
-}
-
-/* OVERLAY */
-.overlay{
-  position:relative;
-  z-index:2;
-  padding:40px;
-  backdrop-filter: blur(10px);
+/* DARK OVERLAY */
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(0,0,0,0.3), #0a0a0a);
 }
 
 /* TEXT */
+.content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  max-width:800px;
+}
+
 h1{
-  font-size:60px;
+  font-size:64px;
   letter-spacing:2px;
+}
+
+.gold{
+  color:#c9a34e;
 }
 
 p{
   margin-top:10px;
   opacity:0.8;
-  font-size:18px;
 }
 
-/* GOLD ACCENT */
-.gold{
-  color:#c9a34e;
-}
-
-/* ANIMATION */
-.fade{
+/* TEXT ANIMATION */
+.reveal span{
+  display:inline-block;
   opacity:0;
-  transform:translateY(50px);
-  transition:1s;
+  transform:translateY(40px);
 }
 
-.fade.show{
-  opacity:1;
-  transform:translateY(0);
-}
-.section {
-  will-change: transform;
-}
-
-/* Cinematic overlay */
-.bg::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.6), #0a0a0a);
+/* SPACING SECTION */
+.spacer{
+  height:60vh;
+  background:#0a0a0a;
 }
 </style>
 </head>
@@ -105,50 +91,58 @@ p{
 <!-- SCENE 1 -->
 <section class="section">
   <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1559526324-593bc073d938')"></div>
-  <div class="overlay fade">
-    <h1>RISING <span class="gold">RUPEES</span></h1>
+  <div class="content">
+    <h1 class="reveal">RISING <span class="gold">RUPEES</span></h1>
     <p>The new era of Indian power</p>
   </div>
 </section>
 
+<div class="spacer"></div>
+
 <!-- SCENE 2 -->
 <section class="section">
   <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1507679799987-c73779587ccf')"></div>
-  <div class="overlay fade">
-    <h1>MARKETS MOVE</h1>
+  <div class="content">
+    <h1 class="reveal">MARKETS MOVE</h1>
     <p>Fortunes rise. Empires fall.</p>
   </div>
 </section>
 
+<div class="spacer"></div>
+
 <!-- SCENE 3 -->
 <section class="section">
   <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c')"></div>
-  <div class="overlay fade">
-    <h1>WEALTH IS <span class="gold">ENGINEERED</span></h1>
+  <div class="content">
+    <h1 class="reveal">WEALTH IS <span class="gold">ENGINEERED</span></h1>
     <p>For those who understand the system</p>
   </div>
 </section>
 
+<div class="spacer"></div>
+
 <!-- SCENE 4 -->
 <section class="section">
   <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d')"></div>
-  <div class="overlay fade">
-    <h1>INDIA IS RISING</h1>
+  <div class="content">
+    <h1 class="reveal">INDIA IS RISING</h1>
     <p>Not growing. Accelerating.</p>
   </div>
 </section>
 
+<div class="spacer"></div>
+
 <!-- SCENE 5 -->
 <section class="section">
   <div class="bg" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee')"></div>
-  <div class="overlay fade">
-    <h1>THIS IS A <span class="gold">MOVEMENT</span></h1>
+  <div class="content">
+    <h1 class="reveal">THIS IS A <span class="gold">MOVEMENT</span></h1>
     <p>Not just content</p>
   </div>
 </section>
 
 <script>
-/* SMOOTH SCROLL (Lenis) */
+/* SMOOTH SCROLL */
 const lenis = new Lenis({
   duration: 1.2,
   smooth: true
@@ -158,21 +152,40 @@ function raf(time) {
   lenis.raf(time);
   requestAnimationFrame(raf);
 }
-
 requestAnimationFrame(raf);
 
-/* FADE ANIMATION */
-const faders = document.querySelectorAll('.fade');
+/* TEXT REVEAL */
+const reveals = document.querySelectorAll('.reveal');
+
+reveals.forEach(el => {
+  let text = el.innerHTML;
+  el.innerHTML = text.split("").map(char => `<span>${char}</span>`).join("");
+});
 
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if(entry.isIntersecting){
-      entry.target.classList.add('show');
+      let spans = entry.target.querySelectorAll('span');
+      spans.forEach((span, i) => {
+        span.style.transition = "0.6s ease";
+        span.style.transitionDelay = i * 0.05 + "s";
+        span.style.opacity = 1;
+        span.style.transform = "translateY(0)";
+      });
     }
   });
-});
+},{threshold:0.5});
 
-faders.forEach(el => observer.observe(el));
+reveals.forEach(el => observer.observe(el));
+
+/* PARALLAX DEPTH */
+window.addEventListener("scroll", () => {
+  document.querySelectorAll('.bg').forEach(bg => {
+    let speed = 0.3;
+    let offset = window.scrollY * speed;
+    bg.style.transform = `translateY(${offset}px) scale(1.1)`;
+  });
+});
 </script>
 
 </body>
